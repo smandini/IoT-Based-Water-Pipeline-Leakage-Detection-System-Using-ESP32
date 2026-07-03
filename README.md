@@ -27,7 +27,8 @@ The concept focuses on monitoring water distribution within the pipeline and sen
 
 Example of the device connection status (NodeMCU ESP32) displayed on Thinger.io:
 
-<img width="1363" height="647" alt="Thinger_Connection" src="https://github.com/user-attachments/assets/b259abb6-b474-4ea8-a4a2-32315b272947" />
+<img width="1363" height="647" alt="Thinger_Connection" src="https://github.com/user-attachments/assets/57ca40b8-cb92-4436-809d-631a9bb44429" />
+
 
 
 Since we use Thinger.io and its Data Buckets to store historical and time series data from connected devices, we need to understand that the server may not be designed to handle frequent device reconnections or unstable network connections. For example, we configure the microcontroller to collect sensor data every five minutes. However, if a reconnection occurs; even for a very brief period, such as a few milliseconds before the next five minutes interval is reached, the system may initiate a synchronization process from the last recorded connection. As a result, this behavior could cause inconsistencies in the data collection intervals recorded in the Data Buckets.
@@ -54,37 +55,22 @@ The addition of multiple analog and digital inputs necessitates accurate calcula
 
 According to the ADS1115 datasheet,
 > The resistor and capacitor are needed. When the ADS1115 is converting data, it draws current in short spikes. The 0.1μF bypass capacitor supplies the momentary bursts of extra current needed from the supply. On the I2C interface, the bus wires are pulled high by pull-up resistors.
-<img width="1159" height="604" alt="Sig (1)" src="https://github.com/user-attachments/assets/41e85c58-c2e1-4b84-b1a9-ff46e8834755" />
+
+<img width="1159" height="604" alt="Sig (1)" src="https://github.com/user-attachments/assets/a2bd1207-4cfd-4175-a5d4-de41c77d65c9" />
+
 
 ## Codes
-```
-A = abs(flowRate2 - flowRate1);
-B = abs(flowRate3 - flowRate2);
-C = 0.04 * flowRate1;
-D = 0.04 * flowRate2;
 
-if (A > C) {
-currentKondisi = "BOCOR";
-currentLokasi = "AREA 1";}
-if (B > D) {
-currentKondisi = "BOCOR";
-currentLokasi = "AREA 1 & 2";}
-else {
-if (B > D) {
-currentKondisi = "BOCOR";
-currentLokasi = "AREA 2";}
-else {
-currentKondisi = "TIDAK BOCOR";
-currentLokasi = "NULL";
-}
-```
+Conceptually, the algorithm applies a threshold-based flow comparison method. It calculates the absolute difference in flow rate between two consecutive flow meters and compares it with a tolerance threshold of 4% of the upstream flow meter's measured flow rate. If the flow rate difference exceeds the specified threshold, the system identifies a potential leak in the pipeline segment located between the two flow meters. This approach is a simple yet widely adopted method for flow meter-based leak detection, based on the principle that a flow loss exceeding the allowable tolerance indicates the possible presence of a leak.
 
 ### The Thinger.io Dashboard for Water Leak Monitoring System
 
-<img width="1000" height="564" alt="WhatsApp Video 2024-09-04 at 6 11 13 PM (1)" src="https://github.com/user-attachments/assets/6bd7f735-de52-493e-802e-1d675224452e" />
+
+https://github.com/user-attachments/assets/a972f8eb-1756-40cb-b195-e520c439153b
 
 
-<img width="1366" height="643" alt="Screenshot (1393)" src="https://github.com/user-attachments/assets/2d351ab2-e5b4-4728-9b55-b52c6b9c67ba" />
+<img width="1366" height="643" alt="Screenshot (1393)" src="https://github.com/user-attachments/assets/67a65d69-aac0-4850-9c20-3c6f56f3d66b" />
+
 
 
 
